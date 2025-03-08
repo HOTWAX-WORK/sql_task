@@ -24,8 +24,9 @@ left join good_identification gi on
 	and gi.GOOD_IDENTIFICATION_TYPE_ID = 'ERP_ID'
 	and gi.ID_VALUE is null;
 ```
-# Cost: 835,541.9
-# Explanation: It selects the PRODUCT_ID, INTERNAL_NAME, PRODUCT_TYPE_ID from the product table and the GOOD_IDENTIFICATION_TYPE_ID from the good_identification table where the GOOD_IDENTIFICATION_TYPE_ID is 'ERP_ID' (representing the NetSuite ID) and the ID_VALUE is null, indicating that the product either lacks or has an invalid NetSuite ID and needs to be updated in NetSuite.
+ Cost: 835,541.9
+# Explanation:
+It selects the PRODUCT_ID, INTERNAL_NAME, PRODUCT_TYPE_ID from the product table and the GOOD_IDENTIFICATION_TYPE_ID from the good_identification table where the GOOD_IDENTIFICATION_TYPE_ID is 'ERP_ID' (representing the NetSuite ID) and the ID_VALUE is null, indicating that the product either lacks or has an invalid NetSuite ID and needs to be updated in NetSuite.
 
 ### 5.3 Top-Selling Product in New York
 
@@ -85,9 +86,10 @@ having
 		city_sales.CITY = pa.CITY
 )
 ```
-# Cost-56,386.83
+ Cost-56,386.83
 
-# EXPLANATION - The query starts with the order_item table because it contains details about products sold, including PRODUCT_ID, QUANTITY, and UNIT_PRICE.Next, order_contact_mech is joined to link orders to their shipping addresses.The postal_address table is then joined to retrieve location details such as CITY and STATE_PROVINCE_GEO_ID. The query filters for STATE_PROVINCE_GEO_ID = 'NY' to ensure that only orders from New York are considered. Yhe product table is also joined to obtain product-related details, specifically PRODUCT_ID and INTERNAL_NAME. Aggregations are performed to compute TOTAL_QUANTITY_SOLD and REVENUE. A subquery determines the maximum quantity sold in each city, and the HAVING clause ensures only the top-selling product per city is returned.
+# EXPLANATION - 
+The query starts with the order_item table because it contains details about products sold, including PRODUCT_ID, QUANTITY, and UNIT_PRICE.Next, order_contact_mech is joined to link orders to their shipping addresses.The postal_address table is then joined to retrieve location details such as CITY and STATE_PROVINCE_GEO_ID. The query filters for STATE_PROVINCE_GEO_ID = 'NY' to ensure that only orders from New York are considered. Yhe product table is also joined to obtain product-related details, specifically PRODUCT_ID and INTERNAL_NAME. Aggregations are performed to compute TOTAL_QUANTITY_SOLD and REVENUE. A subquery determines the maximum quantity sold in each city, and the HAVING clause ensures only the top-selling product per city is returned.
 
 
 
@@ -113,8 +115,9 @@ select
 from
 	inventory_item ii ;
 ```
-# Cost - 217,246.4
-# Explanation - This SQL query selects inventory details from the inventory_item table. It retrieves the PRODUCT_ID, FACILITY_ID, total quantity on hand, available-to-promise quantity, and calculates the difference between these two quantities as DIFFERENCE (i.e., the quantity on hand that is not available to promise).
+ Cost - 217,246.4
+# Explanation -
+This SQL query selects inventory details from the inventory_item table. It retrieves the PRODUCT_ID, FACILITY_ID, total quantity on hand, available-to-promise quantity, and calculates the difference between these two quantities as DIFFERENCE (i.e., the quantity on hand that is not available to promise).
 
 
 
@@ -147,8 +150,9 @@ group by
 having
 	COUNT(ri.RETURN_ID) = 1;
 ```
-# Cost - 6,214.17
-# Explanation - This SQL query retrieves information about returned items from the previous month by joining the return_item, return_header, and person tables. It selects the PARTY_ID, ORDER_ID, and FIRST_NAME of the person associated with the return. The query filters for returns that occurred in the previous month and groups the results by ORDER_ID and PARTY_ID. It only includes orders that have exactly one return, using the HAVING COUNT(ri.RETURN_ID) = 1 condition.
+ Cost - 6,214.17
+# Explanation - 
+This SQL query retrieves information about returned items from the previous month by joining the return_item, return_header, and person tables. It selects the PARTY_ID, ORDER_ID, and FIRST_NAME of the person associated with the return. The query filters for returns that occurred in the previous month and groups the results by ORDER_ID and PARTY_ID. It only includes orders that have exactly one return, using the HAVING COUNT(ri.RETURN_ID) = 1 condition.
 
 ### 4 Returns and Appeasements 
 
@@ -175,5 +179,6 @@ left join return_adjustment ra on
 	ra.RETURN_ID = rh.RETURN_ID
 	and ra.RETURN_ADJUSTMENT_TYPE_ID = 'APPEASEMENT';
 ```
-# Cost - 4,221.67
-# Explanation - This SQL query calculates key return details by joining the `return_header`, `return_item`, and `return_adjustment` tables. It counts the total number of returned items, calculates the total return value by multiplying the return price by the return quantity, and sums the results. Additionally, it counts the number of appeasements made for returns and calculates the total appeasement amount. The appeasements are identified by the condition `RETURN_ADJUSTMENT_TYPE_ID = 'APPEASEMENT'`, and all returns, including those without appeasements, are considered using a left join.
+ Cost - 4,221.67
+# Explanation - 
+This SQL query calculates key return details by joining the `return_header`, `return_item`, and `return_adjustment` tables. It counts the total number of returned items, calculates the total return value by multiplying the return price by the return quantity, and sums the results. Additionally, it counts the number of appeasements made for returns and calculates the total appeasement amount. The appeasements are identified by the condition `RETURN_ADJUSTMENT_TYPE_ID = 'APPEASEMENT'`, and all returns, including those without appeasements, are considered using a left join.
